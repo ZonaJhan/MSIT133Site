@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h1>Login</h1>
+<div id="divNmae">
+    <label>Name: </label>
+    <input id="txtName" type="text" placeholder="user name" />
+    <label id="resulte"></label>
+</div>
+<div>
+    <label>Email: </label>
+    <input id="txtEmail" type="email" placeholder="user name" />
+    <label id="resulte"></label>
+</div>
+<input id="bnt1" type="button" value="Ok" />
+
+@section Scripts{
+    <script>
+        const txtName = document.querySelector("#txtName");
+        const txtEmail = document.querySelector("#txtEmail");
+        const resulte = document.querySelector("#resulte");
+        const btn = document.querySelector("#btn1");
+        //建立Ajax object
+        const xml = new XMLHttpRequest();
+        //txtName.addEventListener('focus', () => {
+        //    event.target.style.background = 'pink';
+        //});
+        //txtName.addEventListener('blur', () => {
+        //    event.target.style.background = '';
+        //});
+        txtName.addEventListener("blur", () => {
+            xml.addEventListener("load", () => {
+                const data = xml.responseText;
+
+                resulte.innerHTML = data;
+            })
+            xml.open("GET", `/api/CheckName?txtName=${txtName.value}`);
+            //open brower enter URL, 第三個參數是bool調整同步(true)或非同步(false)
+            xml.timeout = 5000;
+            xml.send(); //Enter
+        })
+
+    </script>
+}

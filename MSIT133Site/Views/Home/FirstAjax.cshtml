@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewData["Title"] = "FirstAjax";
+}
+
+<h1>FirstAjax</h1>
+<input id="inpName" type="text" placeholder="user name" />
+<input id="inpAge" type="number" placeholder="user age" />
+<div id="div1"></div>
+<input id="btn" type="button" value="submit" />
+<input id="btn1" type="button" value="load" />
+<input id="btnStop" type="button" value="stop" />
+@section Scripts{
+    <script>
+        const username = document.querySelector("#inpName");
+        const userage = document.querySelector("#inpAge");
+        const btn = document.querySelector("#btn1");
+        const btnStop = document.querySelector("#btnStop");
+        const divMessage = document.querySelector("#div1");
+        //1.create a Ajax object
+        const xhr = new XMLHttpRequest();
+        btn.addEventListener("click", () => {
+
+            //3.get reponse from server
+            //load event means the server already sent the result to the client
+            xhr.addEventListener("load", () => {
+                //get result
+                const data = xhr.responseText;
+                //show the result in divMessage
+                divMessage.innerHTML = data;
+                console.log("load");
+            })
+            //ajax start
+            xhr.addEventListener("loadstart", () => {
+                console.log("laodstart");
+                btn.value = "loading...";
+                btn.setAttribute("disabled", "disabled");
+            })
+            //ajax finish
+            xhr.addEventListener("loadend", () => {
+                console.log("laodend");
+                btn.value = "Load";
+                btn.removeAttribute("disabled");
+            })
+            //timeout
+            xhr.addEventListener("timeout", () =>{
+                divMessage.innerHTML = "伺服器忙線中,請稍後再試"
+            })
+
+            //abort
+            xhr.addEventListener("abort", () =>{
+                console.log("abort");
+                divMessage.innerHTML = "取消執行"
+            })
+
+            //2.sent request to server
+            @*@Url.Action();
+            @Url.Content();*@
+            //const url = "@Url.Action("Index", "api")";
+            const url = "@Url.Content("~/api/index")";
+            const params = `?name=${username.value}&age=${userage.value}`
+
+            //xhr.open("GET", `/api/index?name=${username.value}&age=${userage.value}`);  //open brower enter URL
+            xhr.open("GET", `${url}${params}`);
+            xhr.timeout = 5000;
+            xhr.send(); //Enter
+        })
+        btnStop.addEventListener("click", () => {
+            xhr.abort();
+        })
+
+    </script>
+}

@@ -1,0 +1,101 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@section Styles
+{
+    <style>
+        h2 {
+            color:mediumpurple;
+        }
+    </style>
+ }
+<div class="text-center">
+    <input id="btn1" type="button" value="click" />
+    <div id="div1">
+        <table id="table" class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>name</td>
+                    <td>workYears</td>
+                    <td>salary</td>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+@section Scripts{
+    <script>
+//const { isEmptyObject } = require("jquery");
+
+        const btn = document.querySelector("#btn1");
+        const myDiv = document.querySelector("#div1");
+        btn.addEventListener("click", () => {
+            //myDiv.innerHTML = "<h2>Hello JS!</h2>";
+
+            //===========================practice===================================
+            //var emps = [{ "name": "Tom", "workYears": 3, "salary": 35000 },
+            //{ "name": "Jack", "workYears": 5, "salary": 40000 },
+            //    { "name": "Mary", "workYears": 7, "salary": 45000 }];
+            ////[]=>[2]
+            //console.log(emps[2])    //{ "name": "Mary", "workYears": 7, "salary": 45000 }
+            ////{}=>{}.屬性  {}.name => Mary
+            //console.log(emps[2].name)   //Mary
+            //for (let i = 0, max = emps.length; i < max; i++) {
+            //    console.log(emps[i].name)
+            //    console.log(emps[i].salary)
+            //    console.log(emps[i].workYears)
+            //}
+            //}
+             //===========================practice===================================
+            var emp = {
+                "employees": [
+                    { "name": "Tom", "workYears": 3, "salary": 35000 },
+                    { "name": "Jack", "workYears": 5, "salary": 40000 },
+                    { "name": "Mary", "workYears": 7, "salary": 45000 }
+                ]
+            };
+            $.each(emp.employees, function (index, value) {
+                let name = value.name;
+                let workYears = value.workYears;
+                let salary = value.salary;
+                console.log(name)
+                console.log(workYears)
+                let newRow = `<tr>
+                      <td >${name}</td>
+                      <td >${workYears}</td>
+                      <td >${salary}</td>
+                  </tr>`
+                $("#tbody").append(newRow);
+            })
+            
+           
+            //for (let i = 0, max = emp.employees.length; i < max; i++)
+            //{
+            //    console.log(emp.employees[i].name)
+            //    console.log(emp.employees[i].salary)
+            //    console.log(emp.employees[i].workYears)
+            //}
+            //===========================ES6===================================
+            emp.employees.forEach((employee) => {
+                
+                console.log(employee.name)
+                console.log(employee.salary)
+                console.log(employee.workYears)
+                //解構賦值(Destructuring assignment)
+                const { name, workYears, salary } = employee
+                console.log(name)
+                console.log(salary)
+                console.log(workYears)
+            
+            
+            })
+        })
+        //$("#btn1").click(() => {
+        //    $("#div1").html("<h2>Hello JQuery!</h2>");
+        //})
+       
+    </script>
+}
