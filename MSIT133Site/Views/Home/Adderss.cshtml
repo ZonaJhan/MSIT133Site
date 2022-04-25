@@ -17,7 +17,37 @@
         const selDistrict = document.querySelector('#select2');
         const selRoad = document.querySelector('#select3');
 
-        selCity.addEventListener('change', () => {
+        //IIFE 立即執行
+        (async function LoadAddress() {
+            //load city
+            const cityResponse = await fetch("@Url.Content("~/api/city")");
+            renderCity(await cityResponse.json());
+            // load district
+            const city = selCity.options[selCity.selectedIndex].value;
+            const districtResponse = await fetch("@Url.Content("~/api/districts")?city=" + city);
+            renderDistrict(await districtResponse.json());
+            //load road
+            const district = selDistrict.options[selDistrict.selectedIndex].value;
+            const roadResponse = await fetch("@Url.Content("~/api/roads")?district=" + district);
+            renderRoad(await roadResponse.json());
+        })();
+
+        selCity.addEventListener('change', async () => {
+            const city = selCity.options[selCity.selectedIndex].value;
+            const districtResponse = await fetch("@Url.Content("~/api/districts")?city=" + city)
+            renderDistrict(await districtResponse.json());
+            const district = selDistrict.options[selDistrict.selectedIndex].value;
+            const roadResponse = await fetch("@Url.Content("~/api/roads")?district=" + district )
+            renderRoad(await roadResponse.json())
+        })
+       selDistrict.addEventListener('change', async() => {
+            const district = selDistrict.options[selDistrict.selectedIndex].value;
+            const roadResponse = await fetch("@Url.Content("~/api/roads")?district=" + district)
+           renderRoad(await roadResponse.json());
+       })
+
+
+        @*selCity.addEventListener('change', () => {
             const city = selCity.options[selCity.selectedIndex].value;
             console.log(city);
             ajaxCall("@Url.Content("~/api/districts")?city=" + city)
@@ -76,7 +106,7 @@
                 xhr.send();
             })
             return promise;
-        }
+        }*@
 
         function renderCity(datas) {
             datas.forEach(item => {
