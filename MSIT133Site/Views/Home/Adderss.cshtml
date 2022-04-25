@@ -1,36 +1,109 @@
 ﻿
 @{
-    ViewData["Title"] = "Adderss";
+    ViewData["Title"] = "Address";
 }
 
-<h1>Adderss</h1>
-<select id="selectCity">
+<h1>Address</h1>
+<select id="select1">
     @*<option value="1">Item1</option>
-    <option value="2">Item2</option>
-    <option value="3">Item3</option>
-    <option value="4">Item4</option>
-    <option value="5">Item5</option>*@
+        <option value="2">Item2</option>
+        <option value="3">text</option>*@
 </select>
+<select id="select2"></select>
+<select id="select3"></select>
 @section Scripts{
-<script>
-    const selCity = document.querySelector("#selectCity");
-    selCity.addEventListener("change", () => {
-        console.log(selCity.options[selCity.selectedIndex].value)
-    })
-    const xml = new XMLHttpRequest();
-    xml.addEventListener("load", () => {
-        const datas =JSON.parse(xml.responseText);
-        //console.log(datas);
-        //step 4 get JSON data
-        datas.forEach((item) => {
-            console.log(item.city);
-            //step 5 show the data
-            const opt = new Option(item.city, item.city);
-            selCity.options.add(opt);
+    <script>
+        const selCity = document.querySelector('#select1');
+        const selDistrict = document.querySelector('#select2');
+        const selRoad = document.querySelector('#select3');
+
+        selCity.addEventListener('change', () => {
+            const city = selCity.options[selCity.selectedIndex].value;
+            console.log(city);
+            ajaxCall("@Url.Content("~/api/districts")?city=" + city)
+                .then(datas => {
+                     renderDistrict(datas);
+                    const district = selDistrict.options[selDistrict.selectedIndex].value;
+                    return ajaxCall("@Url.Content("~/api/roads")?district=" + district )
+                })
+                .then(datas => {
+                    renderRoad(datas);
+                })
+                .catch(error => {
+                    console.log("有錯誤：" + error);
+                })
+          })
+
+        selDistrict.addEventListener('change', () => {
+               const district = selDistrict.options[selDistrict.selectedIndex].value;
+               ajaxCall("@Url.Content("~/api/roads")?district=" + district)
+                     .then(datas => {
+                          renderRoad(datas);
+                     })
+                    .catch(error => {
+                          console.log("有錯誤：" + error);
+                    })
         })
-        
-    })
-    xml.open("get", "@Url.Content("~/api/city")");
-    xml.send();
-</script>
- }
+        ajaxCall("@Url.Content("~/api/city")")
+            .then(datas => {
+                renderCity(datas);
+                const city = selCity.options[selCity.selectedIndex].value;
+                return ajaxCall("@Url.Content("~/api/districts")?city=" + city )
+            })
+            .then(datas => {
+                renderDistrict(datas);
+                const district = selDistrict.options[selDistrict.selectedIndex].value;
+                return ajaxCall("@Url.Content("~/api/roads")?district=" + district )
+            })
+            .then(datas => {
+                renderRoad(datas);
+            })
+            .catch(error => {
+                console.log("有錯誤：" + error);
+            })
+
+        function ajaxCall(url) {
+            const promise = new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.addEventListener('load', () => {
+                    if (xhr.status == 200) {
+                        resolve(JSON.parse(xhr.responseText)) //轉型成JSON物件
+                    } else {
+                        reject(Error(xhr.status));
+                    }
+                })
+                xhr.open("get", url);
+                xhr.send();
+            })
+            return promise;
+        }
+
+        function renderCity(datas) {
+            datas.forEach(item => {
+                const opt = new Option(item.city, item.city);
+                selCity.options.add(opt);
+            })
+        }
+        function renderDistrict(datas) {
+            //清除原有的option標籤
+            while (selDistrict.length > 0) {
+                selDistrict.remove(selDistrict.length - 1)
+            }
+            datas.forEach(item => {
+                const opt = new Option(item.siteId, item.siteId);
+                selDistrict.options.add(opt);
+            })
+        }
+        function renderRoad(datas) {
+            //清除原有的option標籤
+            while (selRoad.length > 0) {
+                selRoad.remove(selRoad.length - 1)
+            }
+            datas.forEach(item => {
+                const opt = new Option(item.road, item.road);
+                selRoad.options.add(opt);
+            })
+        }
+    </script>
+}
+

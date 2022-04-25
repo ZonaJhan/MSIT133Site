@@ -37,6 +37,10 @@ namespace MSIT133Site.Controllers
             ViewBag.name = user.UserName;
             return View();
         }
+        public IActionResult Promise()
+        {
+            return View();
+        }
 
         public IActionResult Privacy()
         {
