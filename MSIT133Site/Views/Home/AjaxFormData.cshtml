@@ -48,7 +48,20 @@
 
     btn.addEventListener("click", (cancel) => {
         cancel.preventDefault();//cancel default action
-        //step1
+
+        const formData = new FormData(document.member);
+        //Fetch
+        fetch("@Url.Content("~/api/Register")", {
+            method: "post",
+            body: formData
+        }).then(Response => Response.text())
+            .then(data => {
+                divMessage.textContent = data;
+            })
+
+
+        //============================================================//
+        @*//step1
         const xml = new XMLHttpRequest();
 
         //step3
@@ -60,7 +73,9 @@
         //step2
         const formData = new FormData(document.member)
         xml.open("post", "@Url.Content("~/api/Register")");
-        xml.send(formData);
+        xml.send(formData);*@
+       //============================================================//
+
     });
     </script>
 
