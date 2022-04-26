@@ -41,7 +41,19 @@ namespace MSIT133Site.Controllers
         {
             return View();
         }
-
+        public IActionResult History()
+        {
+            return View();
+        }
+        public IActionResult jQuery()
+        {
+            return View();
+        }
+        public IActionResult Partial()
+        {
+            ViewBag.hello = "Hello PartialView";
+            return PartialView();
+        }
         public IActionResult Privacy()
         {
             return View();

@@ -9,8 +9,8 @@ namespace MSIT133Site.Models
     {
         public string UserName { get; set; }
         public int? age { get; set; }
-        public string phone { get; set; }
-        public string address { get; set; }
-        public string email { get; set; }
+        //public string phone { get; set; }
+        //public string address { get; set; }
+        //public string email { get; set; }
     }
 }
